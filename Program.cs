@@ -8,8 +8,9 @@ namespace LeetCode
         static void Main(string[] args)
         {
             Solution solution = new Solution();
-            int[] nums = { 3, 2, 2, 3 };
-            Console.WriteLine(solution.StrStr("hello", "ll")); 
+            int[] nums = { 1, 3, 5, 6 };
+            int target = 5;
+            Console.WriteLine(solution.SearchInsert(nums, target)); 
         }
 
         

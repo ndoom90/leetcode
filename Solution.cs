@@ -7,7 +7,30 @@ namespace LeetCode
 {
     public class Solution
     {
-        
+        // Search insert position
+        public int SearchInsert(int[] nums, int target) {
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (nums[i] < target)
+                {
+                    continue;
+                }
+
+                if (nums[i] == target)
+                {
+                    return i;
+                }
+
+                if (nums[i] > target)
+                {
+                    return i;
+                }
+
+            }
+
+            return nums.Length;
+        }
         // Implement strStr()
         public int StrStr(string haystack, string needle)
         {
