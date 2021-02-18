@@ -1,12 +1,119 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Threading;
 
 namespace LeetCode
 {
     public class Solution
     {
+        // Plus one
+        public int[] PlusOne(int[] digits)
+        {
+            var firstDigitIndex = digits.Length - 1;
+            var digitsList = digits.ToList();
+            digitsList[firstDigitIndex] += 1;
+            
+            for (int i = firstDigitIndex; i >= 0; i--)
+            {
+                if (i == 0)
+                {
+                    if (digitsList[i] != 10) continue;
+                    digitsList[i] = 0;    
+                    digitsList.Insert(0, 1);
+                }
+                else
+                {
+                    if (digitsList[i] != 10) continue;
+                    digitsList[i] = 0;
+                    digitsList[i - 1] += 1;
+                }
+                
+            }
+
+            var resultArray = digitsList.ToArray();
+            return resultArray;
+        }
+
+        // Length of last word
+        public int LengthOfLastWord(string s)
+        {
+            var splitS = s.Split(' ');
+            
+            for (var i = splitS.Length - 1; i >= 0; i--)
+            {
+                if (splitS[i] == "")
+                {
+                    continue;
+                }
+
+                else
+                {
+                    return splitS[i].Length;
+                }
+            }
+
+            return 0;
+        }
+        
+        // Maximum subarray
+        public int MaxSubArray(int[] nums)
+        {
+            int maxSum = 0;
+            
+            for (int i = 0; i < nums.Length; i++)
+            {
+                var temp = FindMaxSum(nums, i + 1);
+                if (i == 0)
+                {
+                    maxSum = temp;
+                    continue;
+                }
+                else
+                {
+                    if (maxSum < temp)
+                    {
+                        maxSum = temp;
+                        continue;
+                    }
+
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            return maxSum;
+        }
+
+        public int FindMaxSum(int[] nums, int size)
+        {
+            int maxSum = 0;
+            
+            for (int i = 0; i < nums.Length - (size - 1); i++)
+            {
+                int sum = 0;
+                
+                for (int j = 0; j < size; j++)
+                {
+                    sum += nums[i + j];
+                }
+                if (i == 0)
+                {
+                    maxSum = sum;
+                }
+
+                else if (sum > maxSum)
+                {
+                    maxSum = sum;
+                }
+            }
+
+            return maxSum;
+        }
         // Search insert position
         public int SearchInsert(int[] nums, int target) {
 
