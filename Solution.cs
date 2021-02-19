@@ -9,6 +9,64 @@ namespace LeetCode
 {
     public class Solution
     {
+        // Add binary
+        public string AddBinary(string a, string b)
+        {
+            var num = long.Parse(a) + long.Parse(b);
+            var list = new List<int>();
+            
+            // Convert number to int list
+            for (int i = 1; num != 0; i++)
+            {
+                list.Insert(0, (int)(num % (10)));
+                num /= 10;
+            }
+            
+            // Clean digit
+            for (int i = list.Count() - 1; i >= 0; i--)
+            {
+                if (i != 0)
+                {
+                    if (list[i] == 2)
+                    {
+                        list[i] = 0;
+                        list[i - 1] += 1;
+                    }
+                    else if (list[i] == 3)
+                    {
+                        list[i] = 1;
+                        list[i - 1] += 1;
+                    }
+                }
+
+                else
+                {
+                    if (list[i] == 2)
+                    {
+                        list[i] = 0;
+                        list.Insert(0, 1);
+                    }
+                    
+                    else if (list[i] == 3)
+                    {
+                        list[i] = 1;
+                        list.Insert(0, 1);
+                    } 
+                }
+            }
+
+            if (list.Count == 0)
+            {
+                list.Add(0);
+            }
+            // Convert List<int> to string
+            string result = "";
+            for (int i = 0; i < list.Count(); i++)
+            {
+                result += list[i];
+            }
+            return result;
+        }
         // Plus one
         public int[] PlusOne(int[] digits)
         {
