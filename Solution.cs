@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Management.Instrumentation;
+using System.Runtime.Serialization;
 using System.Threading;
 
 namespace LeetCode
@@ -12,61 +14,104 @@ namespace LeetCode
         // Add binary
         public string AddBinary(string a, string b)
         {
-            var num = long.Parse(a) + long.Parse(b);
-            var list = new List<int>();
-            
-            // Convert number to int list
-            for (int i = 1; num != 0; i++)
+            var length = a.Length <= b.Length ? a.Length : b.Length;
+            var resultList = new List<char>();
+            var remainder = new Stack();
+            for (var i = 0; i < length; i++)
             {
-                list.Insert(0, (int)(num % (10)));
-                num /= 10;
+                resultList.Insert(0,CalDigitDuo(a[a.Length - i - 1], b[b.Length - i - 1], remainder));
             }
-            
-            // Clean digit
-            for (int i = list.Count() - 1; i >= 0; i--)
-            {
-                if (i != 0)
-                {
-                    if (list[i] == 2)
-                    {
-                        list[i] = 0;
-                        list[i - 1] += 1;
-                    }
-                    else if (list[i] == 3)
-                    {
-                        list[i] = 1;
-                        list[i - 1] += 1;
-                    }
-                }
 
-                else
+            
+            
+            if (a.Length > b.Length)
+            {
+                for (int i = 0; i < a.Length - length; i++)
                 {
-                    if (list[i] == 2)
-                    {
-                        list[i] = 0;
-                        list.Insert(0, 1);
-                    }
-                    
-                    else if (list[i] == 3)
-                    {
-                        list[i] = 1;
-                        list.Insert(0, 1);
-                    } 
+                    resultList.Insert(0, CalDigitSolo(a[a.Length - length - (i + 1)], remainder));
                 }
             }
 
-            if (list.Count == 0)
+            else
             {
-                list.Add(0);
+                for (int i = 0; i < b.Length - length; i++)
+                {
+                    resultList.Insert(0, CalDigitSolo(b[b.Length - length - (i + 1)], remainder));
+                }
             }
-            // Convert List<int> to string
-            string result = "";
-            for (int i = 0; i < list.Count(); i++)
+
+            if (remainder.Count != 0)
             {
-                result += list[i];
+                resultList.Insert(0, Convert.ToChar(remainder.Pop().ToString()));
             }
-            return result;
+
+            
+            string resultString = new string(resultList.ToArray());
+
+            return resultString;
         }
+
+        private char CalDigitSolo(char a, Stack st)
+        {
+            var sum = 0;
+            if (st.Count != 0)
+            {
+                sum = Convert.ToInt32(new string(a, 1)) + (int)st.Pop();    
+            }
+
+            else
+            {
+                sum = Convert.ToInt32(new string(a, 1));
+            }
+            
+            if (sum == 2)
+            {
+                st.Push(1);
+                return '0';
+            }
+            else if (sum == 3)
+            {
+                st.Push(1);
+                return '1';
+            }
+            else
+            {
+                return Convert.ToChar(sum.ToString());
+            }
+        }
+
+        
+        private char CalDigitDuo(char a, char b, Stack st)
+        {
+            var sum = 0;
+            if (st.Count != 0)
+            {
+                sum = Convert.ToInt32(new string(a, 1)) + Convert.ToInt32(new string(b, 1)) + (int)st.Pop();    
+            }
+
+            else
+            {
+                sum = Convert.ToInt32(new string(a, 1)) + Convert.ToInt32(new string(b, 1));
+            }
+            
+            if (sum == 2)
+            {
+                st.Push(1);
+                return '0';
+            }
+            else if (sum == 3)
+            {
+                st.Push(1);
+                return '1';
+            }
+            else
+            {
+                return Convert.ToChar(sum.ToString());
+            }
+            
+            
+        }
+        
         // Plus one
         public int[] PlusOne(int[] digits)
         {
